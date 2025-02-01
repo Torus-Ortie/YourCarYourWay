@@ -2,18 +2,13 @@ package com.openclassrooms.yourcaryourway.repositories;
 
 import com.openclassrooms.yourcaryourway.models.User;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @NonNull
-    Optional<User> findById(@NonNull Long id);
-
     User findByEmail(String email);
-
-    User findByRole(String role);
+    List<User> findByRole(String role);
 }
