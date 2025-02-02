@@ -1,15 +1,15 @@
 -- Création de la base de données
-CREATE DATABASE YourCarYourWayDB;
-USE YourCarYourWayDB;
+CREATE DATABASE ycyw;
+USE ycyw;
 
 -- Table des utilisateurs
 CREATE TABLE `USERS` (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Role ENUM('CLIENT', 'EMPLOYEE', 'ADMIN') NOT NULL DEFAULT 'CLIENT',
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    Password VARCHAR(255) NOT NULL
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `role` ENUM('CLIENT', 'SUPPORT', 'ADMIN') NOT NULL DEFAULT 'CLIENT',
+    `firstname` VARCHAR(255) NOT NULL,
+    `lastname` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL UNIQUE,
+    `password` VARCHAR(255) NOT NULL
 );
 
 -- Table des agences
@@ -73,12 +73,13 @@ CREATE TABLE Payments (
 );
 
 -- Table des messages de support
-CREATE TABLE SupportMessages (
-    MessageID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT NOT NULL,
-    ReservationID INT DEFAULT NULL,
-    Content TEXT NOT NULL,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (ReservationID) REFERENCES Reservations(ReservationID)
+CREATE TABLE `SUPPORTMESSAGES` (
+    `messageid` INT AUTO_INCREMENT PRIMARY KEY,
+    `userid` INT NOT NULL,
+    `reservationid` INT DEFAULT NULL,
+    `content` TEXT NOT NULL,
+    `createdat` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`userid`) REFERENCES `USERS` (`id`);
+ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`reservationid`) REFERENCES `USERS` (`id`);

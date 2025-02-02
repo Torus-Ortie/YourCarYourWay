@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.HtmlUtils;
 
 import com.openclassrooms.yourcaryourway.models.SupportMessages;
+import com.openclassrooms.yourcaryourway.services.SupportMessagesService;
 
 @RestController
 @RequestMapping("/api")
