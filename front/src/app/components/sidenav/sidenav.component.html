@@ -1,0 +1,26 @@
+<nav>
+<mat-toolbar>
+    <a routerLink="/" routerLinkActive="active">
+      <img mat-card-image [src]="'logoMDD.png'" alt="logo" [width]="140" [height]="80" priority/>
+    </a>
+  <div id="header-nav-links" class="flex">
+    <a routerLink="/articles" routerLinkActive="active" ariaCurrentWhenActive="page">Articles</a>
+    <a routerLink="/themes" routerLinkActive="active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact: true}">Thèmes</a>
+    <a routerLink="/me" routerLinkActive="active" ariaCurrentWhenActive="page"
+      style="
+          display: flex;
+          flex-direction: column;
+          align-items:center;
+          justify-content: center;">
+      <mat-icon aria-hidden="false" aria-label="me" fontIcon="account_circle" class="avatar"
+        style="font-size: 48px;
+                        width: 48px;
+                        height: 48px;">
+      </mat-icon>
+    </a>
+  </div>
+  <button mat-icon-button (click)="toggleSidebar()" id="mobile-nav-trigger">
+    <mat-icon fontIcon="menu"></mat-icon>
+  </button>
+</mat-toolbar>
+</nav>

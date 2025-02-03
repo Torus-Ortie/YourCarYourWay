@@ -1,0 +1,25 @@
+<header class="header-primary">
+  <app-sidenav></app-sidenav>
+</header>
+<mat-sidenav-container>
+  <mat-sidenav  #sidenav mode="over" position="end"  [ngClass]="{'open': isOpen}" role="navigation">
+    <nav class="auto-grid">
+      <a routerLink="/message" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()">Chat</a>
+      <a routerLink="/me" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeSidebar()"
+        style="
+            --justify: center;
+          display: flex;
+          flex-direction: column;
+          align-items:flex-end;">
+        <mat-icon aria-hidden="false" aria-label="me" fontIcon="account_circle" class="avatar"
+          style="font-size: 48px;
+                        width: 48px;
+                        height: 48px;">
+        </mat-icon>
+      </a>
+    </nav>
+  </mat-sidenav>
+  <mat-sidenav-content class="mat-sidenav-content-wrapper">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
