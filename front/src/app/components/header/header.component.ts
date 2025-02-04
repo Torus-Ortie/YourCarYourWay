@@ -8,7 +8,7 @@ import { SidebarService } from '../../services/sidebar.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements AfterViewInit {
-  title: string = "MDD"
+  title: string = "YCYW"
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 

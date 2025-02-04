@@ -28,8 +28,8 @@ import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
-import { ChatComponent } from './components/chat/chat.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { RegisterComponent } from './features/auth/components/register/register.component';
 
 registerLocaleData(localeFr);
 
@@ -51,11 +51,11 @@ const materialModule = [
   declarations: [
     AppComponent,
     LoginComponent,
+    RegisterComponent,
     NotFoundComponent,
     MeComponent,
     HomeComponent,
     HeaderComponent,
-    ChatComponent,
     SidenavComponent
   ],
   imports: [

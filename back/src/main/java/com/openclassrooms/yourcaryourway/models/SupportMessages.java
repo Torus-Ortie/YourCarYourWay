@@ -18,13 +18,13 @@ import lombok.Data;
 public class SupportMessages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "messageid", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "userid", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "reservationid", nullable = false)
+    @Column(name = "reservation_id", nullable = false)
     private String reservationId;
 
     @Column(nullable = false)

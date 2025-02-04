@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/h
 import { throwError } from 'rxjs';
 
 export const jwtInterceptor = (request: HttpRequest<any>, next: HttpHandlerFn) => {
-  if (request.url.includes('/login') || request.url.includes('/register')) {
+  if (request.url.includes('/login')) {
     return next(request);
   }
 

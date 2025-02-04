@@ -1,24 +1,24 @@
 <main class="grid-template-layout relative">
-    <a routerLink="/" class="return-link">
-      <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
-    </a>
-  
-    <form (ngSubmit)="onSubmit()">
-      <h2>Se connecter</h2>
-  
-      <mat-form-field appearance="outline">
-        <mat-label>{{labels['emailOrName']}}</mat-label>
-        <input matInput [formControl]="formControls['emailOrName']" (blur)="onBlur('emailOrName')">
-        <mat-error *ngIf="formControls['emailOrName'].invalid && formControls['emailOrName'].touched">{{errorMessages['emailOrName']}}</mat-error>
-      </mat-form-field>
-  
-      <mat-form-field appearance="outline">
-        <mat-label>{{labels['password']}}</mat-label>
-        <input type="password" matInput [formControl]="formControls['password']" (blur)="onBlur('password')">
-        <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
-      </mat-form-field>
-  
-      <button type="submit" [disabled]="formControls['emailOrName'].invalid || formControls['password'].invalid" mat-raised-button color="primary">Se connecter</button>
-    </form>
-  </main>
+  <a routerLink="/" class="return-link">
+    <mat-icon aria-hidden="false" aria-label="retour" fontIcon="arrow_back"></mat-icon>
+  </a>
+
+  <form (ngSubmit)="onSubmit()">
+    <h2>Se connecter</h2>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{labels['emailOrName']}}</mat-label>
+      <input matInput [formControl]="formControls['emailOrName']" (blur)="onBlur('emailOrName')">
+      <mat-error *ngIf="formControls['emailOrName'].invalid && formControls['emailOrName'].touched">{{errorMessages['emailOrName']}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{labels['password']}}</mat-label>
+      <input type="password" matInput [formControl]="formControls['password']" (blur)="onBlur('password')">
+      <mat-error *ngIf="formControls['password'].invalid && formControls['password'].touched">{{errorMessages['password']}}</mat-error>
+    </mat-form-field>
+
+    <button type="submit" [disabled]="formControls['emailOrName'].invalid || formControls['password'].invalid" mat-raised-button color="primary">Se connecter</button>
+  </form>
+</main>
   

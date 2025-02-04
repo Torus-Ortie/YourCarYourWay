@@ -1,5 +1,10 @@
 package com.openclassrooms.yourcaryourway.models;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,12 +29,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
-
-    @Column(nullable = false)
-    private String firstName;
+    private String name;
 
     @Column(nullable = false)
     private String lastname;
@@ -37,6 +38,16 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(nullable = false)
     private String password;
+
+    @CreationTimestamp
+    private LocalDateTime created_at;
+
+    @UpdateTimestamp
+    private LocalDateTime updated_at;
 }

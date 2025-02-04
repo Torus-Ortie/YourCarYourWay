@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { SessionService } from '../../../../services/session.service';
 import { LoginRequest } from '../../../../interfaces/auth.interface'; 
 import { AuthService } from '../../../../services/auth.service';
-import { Subscription } from "rxjs";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   login(): void {
     const loginRequest: LoginRequest = {
-      email: this.formControls['email'].value,
+      emailOrName: this.formControls['emailOrName'].value,
       password: this.formControls['password'].value,
     };
 
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.formControls['email'].valid && this.formControls['password'].valid) {
+    if (this.formControls['emailOrName'].valid && this.formControls['password'].valid) {
       this.login();
     }
   }

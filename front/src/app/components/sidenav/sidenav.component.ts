@@ -12,8 +12,4 @@ export class SidenavComponent {
   public toggleSidebar():void {
     this.sidebarService.toggleSidebar();
   }
-
-  public closeSidebar():void {
-    this.sidebarService.closeSidebar();
-  }
 }

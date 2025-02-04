@@ -17,22 +17,22 @@ export class MeComponent implements OnInit , OnDestroy {
   private userSubscription: Subscription | null = null;
 
   formControls: { [key: string]: FormControl } = {
-    firstname: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
   };
 
   labels: { [key: string]: string } = {
-    firstname: 'Nom d’utilisateur',
+    name: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
   };
 
   controlNames: { [key: string]: string } = {
-    firstname: 'un nom d’utilisateur avec au moins 4 caractères',
+    name: 'un nom d’utilisateur avec au moins 4 caractères',
     email: 'une adresse e-mail valide',
   };
 
   errorMessages: { [key: string]: string } = {
-    firstname: '',
+    name: '',
     email: '',
   };
 
@@ -44,13 +44,11 @@ export class MeComponent implements OnInit , OnDestroy {
     this.userSubscription = this.sessionService.user$.subscribe(user => {
       this.user = user;
       if (this.user) {
-        this.formControls['firstname'].setValue(this.user.firstname);
+        this.formControls['name'].setValue(this.user.name);
         this.formControls['email'].setValue(this.user.email);
-        this.formControls['role'].setValue(this.user.role);
       } else {
-        this.formControls['firstname'].setValue('');
+        this.formControls['name'].setValue('');
         this.formControls['email'].setValue('');
-        this.formControls['role'].setValue('');
       }
     });
   }
@@ -67,11 +65,10 @@ export class MeComponent implements OnInit , OnDestroy {
       if (this.user && this.user.id !== undefined && this.user.id !== null) {
         const updatedUser: User = {
           id: this.user.id,
-          firstname: this.formControls['firstname'].value,
-          lastname: this.formControls['lastname'].value,
+          name: this.formControls['name'].value,
           email: this.formControls['email'].value,
           password: this.user.password,
-          role: this.formControls['role'].value
+          role: this.user.role
         };
         this.userService.updateUser(updatedUser).subscribe((user) => {
           this.sessionService.updateUser(user);
@@ -88,7 +85,6 @@ export class MeComponent implements OnInit , OnDestroy {
       () => {}
     );
   }
-
 
   ngOnDestroy(): void {
     if (this.userSubscription) {

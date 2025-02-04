@@ -5,81 +5,85 @@ USE ycyw;
 -- Table des utilisateurs
 CREATE TABLE `USERS` (
     `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
     `role` ENUM('CLIENT', 'SUPPORT', 'ADMIN') NOT NULL DEFAULT 'CLIENT',
-    `firstname` VARCHAR(255) NOT NULL,
-    `lastname` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `password` VARCHAR(255) NOT NULL
+    `password` VARCHAR(255) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Table des agences
-CREATE TABLE Agencies (
-    AgencyID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Address TEXT NOT NULL,
-    City VARCHAR(50) NOT NULL,
-    Country VARCHAR(50) NOT NULL,
-    PhoneNumber VARCHAR(20)
+CREATE TABLE `AGENCIES` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
+    `address` TEXT NOT NULL,
+    `city` VARCHAR(50) NOT NULL,
+    `country` VARCHAR(50) NOT NULL,
+    `phone_number` VARCHAR(20)
 );
 
 -- Table des catégories de véhicules
-CREATE TABLE VehicleCategories (
-    CategoryID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(50) NOT NULL UNIQUE,
-    Description TEXT
+CREATE TABLE `VEHICULECATEGORIES` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(50) NOT NULL UNIQUE,
+    `description` TEXT
 );
 
 -- Table des véhicules
-CREATE TABLE Vehicles (
-    VehicleID INT AUTO_INCREMENT PRIMARY KEY,
-    CategoryID INT NOT NULL,
-    AgencyID INT NOT NULL,
-    Brand VARCHAR(50) NOT NULL,
-    Model VARCHAR(50) NOT NULL,
-    Year INT NOT NULL,
-    LicensePlate VARCHAR(20) UNIQUE NOT NULL,
-    FOREIGN KEY (CategoryID) REFERENCES VehicleCategories(CategoryID),
-    FOREIGN KEY (AgencyID) REFERENCES Agencies(AgencyID)
+CREATE TABLE `VEHICULES` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `category_id` INT NOT NULL,
+    `agency_id` INT NOT NULL,
+    `brand` VARCHAR(50) NOT NULL,
+    `model` VARCHAR(50) NOT NULL,
+    `year` INT NOT NULL,
+    `license_plate` VARCHAR(20) UNIQUE NOT NULL,
 );
 
 -- Table des réservations
-CREATE TABLE Reservations (
-    ReservationID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT NOT NULL,
-    VehicleID INT NOT NULL,
-    PickupAgencyID INT NOT NULL,
-    DropoffAgencyID INT NOT NULL,
-    PickupDate DATETIME NOT NULL,
-    DropoffDate DATETIME NOT NULL,
-    TotalPrice DECIMAL(10, 2) NOT NULL,
-    Status ENUM('Pending', 'Confirmed', 'Cancelled', 'Completed') DEFAULT 'Pending',
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (VehicleID) REFERENCES Vehicles(VehicleID),
-    FOREIGN KEY (PickupAgencyID) REFERENCES Agencies(AgencyID),
-    FOREIGN KEY (DropoffAgencyID) REFERENCES Agencies(AgencyID)
+CREATE TABLE `RESERVATIONS` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT NOT NULL,
+    `vehicle_id` INT NOT NULL,
+    `pickup_agency_id` INT NOT NULL,
+    `dropoff_agency_id` INT NOT NULL,
+    `pickup_date` DATETIME NOT NULL,
+    `dropoff_date` DATETIME NOT NULL,
+    `total_price` DECIMAL(10, 2) NOT NULL,
+    `status` ENUM('Pending', 'Confirmed', 'Cancelled', 'Completed') DEFAULT 'Pending',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 
 -- Table des paiements
-CREATE TABLE Payments (
-    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-    ReservationID INT NOT NULL,
-    PaymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Amount DECIMAL(10, 2) NOT NULL,
-    PaymentMethod ENUM('Credit Card', 'PayPal', 'Bank Transfer') NOT NULL,
-    Status ENUM('Success', 'Failed') DEFAULT 'Success',
-    FOREIGN KEY (ReservationID) REFERENCES Reservations(ReservationID)
+CREATE TABLE `PAYMENT` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `reservation_id` INT NOT NULL,
+    `payment_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `amount` DECIMAL(10, 2) NOT NULL,
+    `payment_method` ENUM('Credit Card', 'PayPal', 'Bank Transfer') NOT NULL,
+    `status` ENUM('Success', 'Failed') DEFAULT 'Success',
 );
 
 -- Table des messages de support
 CREATE TABLE `SUPPORTMESSAGES` (
-    `messageid` INT AUTO_INCREMENT PRIMARY KEY,
-    `userid` INT NOT NULL,
-    `reservationid` INT DEFAULT NULL,
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT NOT NULL,
+    `reservation_id` INT DEFAULT NULL,
     `content` TEXT NOT NULL,
-    `createdat` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`userid`) REFERENCES `USERS` (`id`);
-ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`reservationid`) REFERENCES `USERS` (`id`);
+ALTER TABLE `VEHICULES` ADD FOREIGN KEY (`category_id`) REFERENCES `VEHICULECATEGORIES` (`id`);
+ALTER TABLE `VEHICULES` ADD FOREIGN KEY (`agency_id`) REFERENCES `AGENCIES` (`id`);
+
+ALTER TABLE `RESERVATIONS` ADD FOREIGN KEY (`user_id`) REFERENCES `USERS` (`id`);
+ALTER TABLE `RESERVATIONS` ADD FOREIGN KEY (`vehicle_id`) REFERENCES `VEHICULES` (`id`);
+ALTER TABLE `RESERVATIONS` ADD FOREIGN KEY (`pickup_agency_id`) REFERENCES `AGENCIES` (`id`);
+ALTER TABLE `RESERVATIONS` ADD FOREIGN KEY (`dropoff_agency_id`) REFERENCES `AGENCIES` (`id`);
+
+ALTER TABLE `PAYMENT` ADD FOREIGN KEY (`reservation_id`) REFERENCES `RESERVATIONS` (`id`);
+
+ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`user_id`) REFERENCES `USERS` (`id`);
+ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`reservation_id`) REFERENCES `RESERVATIONS` (`id`);

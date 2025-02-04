@@ -7,18 +7,18 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
-import { ChatComponent } from './components/chat/chat.component';
+import { RegisterComponent } from './features/auth/components/register/register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [UnauthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
   {
     path: '',
     component: HeaderComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'me', component: MeComponent },
-      { path: 'message/:recipient', component: ChatComponent }
+      { path: 'me', component: MeComponent }
     ]
   },
   { path: '404', component: NotFoundComponent }
