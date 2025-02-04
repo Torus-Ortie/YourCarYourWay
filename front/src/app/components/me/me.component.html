@@ -1,54 +1,24 @@
 <main>
-    <section>
-      <h2>Profil utilisateur</h2>
-  
-      <form (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>{{labels['name']}}</mat-label>
-          <input matInput [formControl]="formControls['name']" (blur)="onBlur('name')">
-          <mat-error *ngIf="formControls['name'].invalid && formControls['name'].touched">{{errorMessages['name']}}</mat-error>
-        </mat-form-field>
-  
-  
-        <mat-form-field appearance="outline">
-          <mat-label>{{labels['email']}}</mat-label>
-          <input matInput [formControl]="formControls['email']" (blur)="onBlur('email')">
-          <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
-        </mat-form-field>
-  
-        <button type="submit" [disabled]="formControls['email'].invalid || formControls['name'].invalid" mat-raised-button color="primary">Sauvegarder</button>
-      </form>
-      <div class="flex">
-        <button type="button" mat-button color="warn" (click)="onLogout()">Se déconnecteur</button>
-      </div>
-  
-    </section>
-  
-  
-    <mat-divider></mat-divider>
-  
-    <section>
-      <h2>Abonnements</h2>
-  
-      <div class="auto-grid">
-  
-          @for (theme of subscribedThemes; track theme.id) {
-            <mat-card class="card">
-              <mat-card-header>
-                <mat-card-title class="mat-h3">{{ theme.title }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="line-clamp">{{ theme.description }}</p>
-              </mat-card-content>
-              <mat-card-actions class="actions">
-                <button mat-raised-button color="primary" (click)="onUnsubscribe(theme.id)">Se désabonner</button>
-              </mat-card-actions>
-            </mat-card>
-          }
-  
-      </div>
-    </section>
-  
-  
-  </main>
+  <h2>Profil utilisateur</h2>
+
+  <form (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>{{labels['firstname']}}</mat-label>
+      <input matInput [formControl]="formControls['firstname']" (blur)="onBlur('firstname')">
+      <mat-error *ngIf="formControls['firstname'].invalid && formControls['firstname'].touched">{{errorMessages['firstname']}}</mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{labels['email']}}</mat-label>
+      <input matInput [formControl]="formControls['email']" (blur)="onBlur('email')">
+      <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
+    </mat-form-field>
+
+    <button type="submit" [disabled]="formControls['email'].invalid || formControls['firstname'].invalid" mat-raised-button color="primary">Sauvegarder</button>
+  </form>
+  <div class="flex">
+    <button type="button" mat-button color="warn" (click)="onLogout()">Se déconnecteur</button>
+  </div>
+</main>
   

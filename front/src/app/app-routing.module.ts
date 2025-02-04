@@ -18,7 +18,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'me', component: MeComponent },
-      { path: 'message', component: ChatComponent }
+      { path: 'message/:recipient', component: ChatComponent }
     ]
   },
   { path: '404', component: NotFoundComponent }

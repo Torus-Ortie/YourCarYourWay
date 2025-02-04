@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from "@angular/forms";
 
 import { User } from '../../interfaces/user.interface';
-import { Theme} from "../../interfaces/theme.interface";
 import { SessionService } from "../../services/session.service";
 import { Subscription } from "rxjs";
 import { UserService } from "../../services/user.service";
@@ -14,28 +13,26 @@ import { Router } from "@angular/router";
   styleUrls: ['./me.component.scss']
 })
 export class MeComponent implements OnInit , OnDestroy {
-  subscribedThemes: Theme[] = [];
   user: User | null = null;
-  private themesSubscription: Subscription | null = null;
   private userSubscription: Subscription | null = null;
 
   formControls: { [key: string]: FormControl } = {
-    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    firstname: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
   };
 
   labels: { [key: string]: string } = {
-    name: 'Nom d’utilisateur',
+    firstname: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
   };
 
   controlNames: { [key: string]: string } = {
-    name: 'un nom d’utilisateur avec au moins 4 caractères',
+    firstname: 'un nom d’utilisateur avec au moins 4 caractères',
     email: 'une adresse e-mail valide',
   };
 
   errorMessages: { [key: string]: string } = {
-    name: '',
+    firstname: '',
     email: '',
   };
 
@@ -44,18 +41,16 @@ export class MeComponent implements OnInit , OnDestroy {
 
 
   ngOnInit(): void {
-    this.themesSubscription = this.sessionService.subscribedThemes$.subscribe(themes => {
-      this.subscribedThemes = themes;
-    });
-
     this.userSubscription = this.sessionService.user$.subscribe(user => {
       this.user = user;
       if (this.user) {
-        this.formControls['name'].setValue(this.user.name);
+        this.formControls['firstname'].setValue(this.user.firstname);
         this.formControls['email'].setValue(this.user.email);
+        this.formControls['role'].setValue(this.user.role);
       } else {
-        this.formControls['name'].setValue('');
+        this.formControls['firstname'].setValue('');
         this.formControls['email'].setValue('');
+        this.formControls['role'].setValue('');
       }
     });
   }
@@ -72,10 +67,11 @@ export class MeComponent implements OnInit , OnDestroy {
       if (this.user && this.user.id !== undefined && this.user.id !== null) {
         const updatedUser: User = {
           id: this.user.id,
-          name: this.formControls['name'].value,
+          firstname: this.formControls['firstname'].value,
+          lastname: this.formControls['lastname'].value,
           email: this.formControls['email'].value,
           password: this.user.password,
-          subscribedThemeIds: this.user.subscribedThemeIds
+          role: this.formControls['role'].value
         };
         this.userService.updateUser(updatedUser).subscribe((user) => {
           this.sessionService.updateUser(user);
@@ -93,16 +89,8 @@ export class MeComponent implements OnInit , OnDestroy {
     );
   }
 
-  onUnsubscribe(themeId : number){
-    this.userService.unsubscribeTheme(themeId).subscribe((updatedUser) => {
-      this.sessionService.updateUser(updatedUser);
-    });
-  }
 
   ngOnDestroy(): void {
-    if (this.themesSubscription) {
-      this.themesSubscription.unsubscribe();
-    }
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
