@@ -1,19 +1,31 @@
-div {
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10vh;
-  padding-inline: 1rem;
-  margin: auto;
-}
-  
-a {
-  margin: 1rem;
-  margin: 1 auto;
-  width: 40%;
+@media (width < 599px){
+  mat-sidenav-content.main{
+    height: var(--content-mobile-height);
+  }
+  .auto-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(200px, 1fr)); 
+    text-align: right;
+  }
 }
 
-img {
-  max-width : 100%;
-  height : auto;
+.avatar {
+  color: var(--gray-200);
+  background-color: transparent;
+  border-radius: 50%;
+}
+
+a.active {
+  color: var(--accent-color);
+  & > .avatar {
+    background-color: var(--accent-color);
+  }
+}
+
+a[routerLinkActive="active"]:hover {
+  opacity: 75%;
+  color: var(--accent-color);
+  & > .avatar {
+    background-color: var(--accent-color);
+  }
 }

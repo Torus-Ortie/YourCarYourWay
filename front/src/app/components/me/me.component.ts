@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from "@angular/forms";
-
 import { User } from '../../interfaces/user.interface';
 import { SessionService } from "../../services/session.service";
-import { Subscription } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { UserService } from "../../services/user.service";
 import { Router } from "@angular/router";
 
@@ -12,83 +11,89 @@ import { Router } from "@angular/router";
   templateUrl: './me.component.html',
   styleUrls: ['./me.component.scss']
 })
-export class MeComponent implements OnInit , OnDestroy {
+export class MeComponent implements OnInit, OnDestroy {
   user: User | null = null;
-  private userSubscription: Subscription | null = null;
-
+  private destroy$ = new Subject<void>();
+  
   formControls: { [key: string]: FormControl } = {
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.email, Validators.required]),
   };
 
-  labels: { [key: string]: string } = {
+  labels = {
     name: 'Nom d’utilisateur',
     email: 'Adresse e-mail',
   };
 
-  controlNames: { [key: string]: string } = {
-    name: 'un nom d’utilisateur avec au moins 4 caractères',
-    email: 'une adresse e-mail valide',
-  };
-
-  errorMessages: { [key: string]: string } = {
+  errorMessages = {
     name: '',
     email: '',
   };
 
-  constructor(private sessionService: SessionService,
-              private userService: UserService, private router: Router) {}
-
+  constructor(
+    private sessionService: SessionService,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.userSubscription = this.sessionService.user$.subscribe(user => {
-      this.user = user;
-      if (this.user) {
-        this.formControls['name'].setValue(this.user.name);
-        this.formControls['email'].setValue(this.user.email);
-      } else {
-        this.formControls['name'].setValue('');
-        this.formControls['email'].setValue('');
-      }
-    });
+    this.sessionService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.user = user;
+        if (this.user) {
+          this.formControls['name'].setValue(this.user.name);
+          this.formControls['email'].setValue(this.user.email);
+        }
+      });
   }
 
-  onBlur(controlName: string) {
+  onBlur(controlName: 'name' | 'email') {
     const control = this.formControls[controlName];
     control.markAsTouched();
-    this.errorMessages[controlName] = control.hasError('required') ? `Veuillez saisir ${this.controlNames[controlName]}` : '';
+
+    if (control.hasError('required')) {
+      this.errorMessages[controlName] = `Veuillez saisir ${this.labels[controlName].toLowerCase()}`;
+    } else if (control.hasError('minlength')) {
+      this.errorMessages[controlName] = `${this.labels[controlName]} doit contenir au moins ${control.errors?.['minlength'].requiredLength} caractères.`;
+    } else if (control.hasError('email')) {
+      this.errorMessages[controlName] = `Veuillez saisir une adresse e-mail valide.`;
+    } else {
+      this.errorMessages[controlName] = '';
+    }
   }
 
   onSubmit() {
-
     if (this.formControls["name"].valid && this.formControls['email'].valid) {
-      if (this.user && this.user.id !== undefined && this.user.id !== null) {
+      if (this.user) {
         const updatedUser: User = {
-          id: this.user.id,
+          ...this.user,
           name: this.formControls['name'].value,
           email: this.formControls['email'].value,
-          password: this.user.password,
-          role: this.user.role
         };
-        this.userService.updateUser(updatedUser).subscribe((user) => {
-          this.sessionService.updateUser(user);
+
+        this.userService.updateUser(updatedUser).subscribe({
+          next: (user) => {
+            this.sessionService.updateUser(user);
+          },
+          error: (err) => {
+            console.error("Erreur lors de la mise à jour du profil", err);
+            alert("Une erreur est survenue lors de la mise à jour du profil.");
+          }
         });
       } else {
-         this.sessionService.logOut();
+        this.sessionService.logOut();
+      }
     }
   }
-  }
 
-  onLogout(){
+  onLogout() {
     this.sessionService.logOut();
-    this.router.navigate(['/login']).then(
-      () => {}
-    );
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

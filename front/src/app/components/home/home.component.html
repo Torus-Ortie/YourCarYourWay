@@ -1,8 +1,11 @@
-<div class="home-page">
-    <img [src]="'logoYCYW.PNG'" alt="logo"/>
-    <mat-card-actions class="home-button">
-      <a routerLink="/login" mat-raised-button>Se connecter</a>
-      <a id="register-button" routerLink="/register" mat-raised-button>S'inscrire</a>
-    </mat-card-actions>
-</div>
-  
+<header>
+  <div class="home-logo-page">
+      <img mat-card-image [src]="'logoYCYW.PNG'" alt="logo" [width]="140" [height]="80" priority/>
+  </div>
+  <div class="home-me-page">
+    <a routerLink="/me" routerLinkActive="active">Mon profile</a>
+  </div>
+</header>
+<main>
+  <h2>Welcome, <span class="capitalize">{{ user?.name }}</span></h2>
+</main> 

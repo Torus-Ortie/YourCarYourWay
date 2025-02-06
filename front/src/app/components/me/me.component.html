@@ -1,26 +1,27 @@
 <main>
-    <section>
       <h2>Profil utilisateur</h2>
   
       <form (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>{{labels['name']}}</mat-label>
-          <input matInput [formControl]="formControls['name']" (blur)="onBlur('name')">
-          <mat-error *ngIf="formControls['name'].invalid && formControls['name'].touched">{{errorMessages['name']}}</mat-error>
-        </mat-form-field>
+        <div>
+          <label for="name">{{ labels['name'] }}</label>
+          <input id="name" type="text" [formControl]="formControls['name']" (blur)="onBlur('name')">
+          <span *ngIf="formControls['name'].invalid && formControls['name'].touched">
+            {{ errorMessages['name'] }}
+          </span>
+        </div>
   
-        <mat-form-field appearance="outline">
-          <mat-label>{{labels['email']}}</mat-label>
-          <input matInput [formControl]="formControls['email']" (blur)="onBlur('email')">
-          <mat-error *ngIf="formControls['email'].invalid && formControls['email'].touched">{{errorMessages['email']}}</mat-error>
-        </mat-form-field>
+        <div>
+          <label for="email">{{ labels['email'] }}</label>
+          <input id="email" type="email" [formControl]="formControls['email']" (blur)="onBlur('email')">
+          <span *ngIf="formControls['email'].invalid && formControls['email'].touched">
+            {{ errorMessages['email'] }}
+          </span>
+        </div>
   
-        <button type="submit" [disabled]="formControls['email'].invalid || formControls['name'].invalid" mat-raised-button color="primary">Sauvegarder</button>
+        <button type="submit" [disabled]="formControls['email'].invalid || formControls['name'].invalid">Sauvegarder</button>
       </form>
       <div class="flex">
-        <button type="button" mat-button color="warn" (click)="onLogout()">Se déconnecteur</button>
+        <button type="button" (click)="onLogout()">Se déconnecter</button>
       </div>
-  
-    </section>
-  </main>
+</main>
   
