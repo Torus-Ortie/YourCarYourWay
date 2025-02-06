@@ -52,6 +52,7 @@ public class UserService {
         user.setEmail(userRegister.getEmail());
         user.setName(userRegister.getName());
         user.setPassword(passwordEncoder.encode(userRegister.getPassword()));
+        user.setRole(Role.CLIENT);
         userRepository.save(user);
         return user;
     }

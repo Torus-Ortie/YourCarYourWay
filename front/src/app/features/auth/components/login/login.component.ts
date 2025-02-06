@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.sessionService.logIn(data.token);
-          this.router.navigate(['/articles']).then(
+          this.router.navigate(['/me']).then(
             () => {
             }
           );

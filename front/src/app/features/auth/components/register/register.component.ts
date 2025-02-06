@@ -69,7 +69,7 @@ errorMessages: { [key: string]: string } = {
       };
       this.subscription = this.authService.register(registerRequest).subscribe({
         next: () => {
-          this.router.navigate(['/articles']).then(
+          this.router.navigate(['/me']).then(
             () => {}
           );
         },

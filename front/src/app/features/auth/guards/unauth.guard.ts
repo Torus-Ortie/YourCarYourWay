@@ -15,7 +15,7 @@ export class UnauthGuard {
     return this.sessionService.isLoggedIn$.pipe(
       map(isLoggedIn => {
         if (isLoggedIn) {
-          return this.router.parseUrl('/articles');
+          return this.router.parseUrl('/');
         }
         return !isLoggedIn;
       })
