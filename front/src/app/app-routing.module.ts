@@ -14,13 +14,14 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
   {
-    path: '',
+    path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]/*,
     children: [
       { path: 'me', component: MeComponent }
-    ]
+    ]*/
   },
+  { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }
 ];
 
