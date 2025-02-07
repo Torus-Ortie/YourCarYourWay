@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.openclassrooms.yourcaryourway.models.SupportMessages;
+import com.openclassrooms.yourcaryourway.models.ChatMessages;
 
 @RestController
 @RequestMapping("/api")
-public class SupportMessagesController {
+public class ChatController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chat")
-    public void sendMessage(@Payload SupportMessages message, SimpMessageHeaderAccessor headerAccessor) {
+    public void sendMessage(@Payload ChatMessages message, SimpMessageHeaderAccessor headerAccessor) {
+        System.out.println("Message reçu du WebSocket : " + message.getContent());
         @SuppressWarnings("null")
         String sender = headerAccessor.getUser().getName();
         message.setUserId(sender);
