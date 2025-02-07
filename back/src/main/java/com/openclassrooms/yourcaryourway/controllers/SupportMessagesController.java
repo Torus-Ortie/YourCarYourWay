@@ -15,7 +15,7 @@ public class SupportMessagesController {
     @Autowired
     private SupportMessagesService supportmessagesservice;
 
-    @MessageMapping("/message")
+    @MessageMapping("/chat")
     public void sendMessage(SupportMessages supportmessages) {
         supportmessagesservice.sendMessageToUser(supportmessages.getReservationId(), supportmessages);
     }

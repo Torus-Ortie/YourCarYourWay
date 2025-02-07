@@ -64,6 +64,14 @@ public class UserController {
             .collect(Collectors.toList());
     }
 
+    @GetMapping("/all")
+    public List<UserDTO> getUsers() {
+        return userService.getUsers()
+            .stream()
+            .map(user -> modelMapper.map(user, UserDTO.class))
+            .collect(Collectors.toList());
+    }
+
     @PostMapping("/auth/register")
 	@ResponseStatus(HttpStatus.CREATED)
     @ResponseBody

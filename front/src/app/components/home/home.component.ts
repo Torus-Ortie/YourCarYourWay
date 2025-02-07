@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Subject } from 'rxjs';
-import { SessionService } from '../../services/session.service';
-import { takeUntil } from 'rxjs/operators';
+import { of, Subject, Subscription } from 'rxjs';
+import { catchError, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { User } from '../../interfaces/user.interface';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -10,17 +10,29 @@ import { User } from '../../interfaces/user.interface';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  name: string = '';
+  role: string = '';
   user: User | null = null;
   private destroy$ = new Subject<void>();
+  private userProfileSubscription: Subscription | null = null;
 
   constructor(
-    private sessionService: SessionService
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.sessionService.user$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => this.user = user);
+    this.userProfileSubscription = this.userService.getUser().pipe(
+      takeUntil(this.destroy$),
+      catchError(_error => {
+        console.error('Erreur lors de la récupération de l\'utilisateur', _error);
+        return of(null);
+      })
+    ).subscribe(user => {
+      if (user) {
+        this.name = user.name;
+        this.role = user.role;
+      }
+    });
   }
 
   ngOnDestroy(): void {

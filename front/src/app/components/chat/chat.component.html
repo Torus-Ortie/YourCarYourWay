@@ -1,5 +1,5 @@
 <section>
-  <h2>Chat with <span class="capitalize font-medium">{{recipientId}}</span></h2>
+  <h2>Chat with <span class="capitalize font-medium">{{reservationId}}</span></h2>
   <div>
     <div>
       <div *ngFor="let message of messages" [ngClass]="{'justify-end': message.userId === currentUserId, 'justify-start': message.userId !== currentUserId}">

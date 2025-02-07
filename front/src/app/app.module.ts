@@ -18,6 +18,7 @@ import { RegisterComponent } from './features/auth/components/register/register.
 import { UnauthComponent } from './components/unauth/unauth.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 registerLocaleData(localeFr);
 
@@ -30,7 +31,8 @@ registerLocaleData(localeFr);
     HomeComponent,
     UnauthComponent,
     ChatComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,

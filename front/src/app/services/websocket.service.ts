@@ -1,58 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import { BehaviorSubject } from 'rxjs';
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client/dist/sockjs';
+import { environment } from '../../environments/environment';
+import { ChatMessage } from '../interfaces/chat.interface';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
-  private stompClient!: Client;
-  private isConnected = false;
-  private messagesSubject = new BehaviorSubject<string[]>([]);
-  public messages$ = this.messagesSubject.asObservable();
+  private stompClient: Client | null = null;
+  private messagesSubject = new Subject<ChatMessage[]>();
 
-  constructor() {
-    this.connect();
-  }
+  constructor() {}
 
-  private connect(): void {
-    const socket = new SockJS('http://localhost:8080/ws'); // URL définie en backend
+  connect(username: string) {
+    if (this.stompClient?.active) {
+      this.disconnect();
+    }
+
     this.stompClient = new Client({
-      webSocketFactory: () => socket,
-      reconnectDelay: 5000, // Tentative de reconnexion automatique
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      webSocketFactory: () => new SockJS(`${environment.wsUrl}`),
+      connectHeaders: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     });
 
-    this.stompClient.onConnect = () => {
-      console.log('✅ WebSocket connecté');
-      this.isConnected = true;
-
-      // S'abonner aux messages reçus sur /topic/messages
-      this.stompClient.subscribe('/topic/messages', (message: Message) => {
-        console.log('📩 Message reçu :', message.body);
-        this.messagesSubject.next([...this.messagesSubject.value, message.body]);
-      });
-    };
-
-    this.stompClient.onDisconnect = () => {
-      console.log('❌ WebSocket déconnecté');
-      this.isConnected = false;
+    this.stompClient.onConnect = (_frame) => {
+      this.getMessages(username)
     };
 
     this.stompClient.activate();
   }
 
-  sendMessage(content: string, reservationId: number): void {
-    if (this.isConnected) {
-      const message = { content, reservationId };
-      this.stompClient.publish({
-        destination: '/app/message', // Doit correspondre à `@MessageMapping("/message")` en backend
-        body: JSON.stringify(message),
-      });
-    } else {
-      console.warn('⚠️ Impossible d\'envoyer le message, WebSocket non connecté.');
+  sendMessage(message: ChatMessage) {
+    this.stompClient?.publish({
+      destination: '/app/chat',
+      body: JSON.stringify(message)
+    });
+
+    this.messagesSubject.next([message]);
+  }
+
+  getMessages(username: string) {
+    this.stompClient?.subscribe(`/user/${username}/queue/messages`, (message) => {
+      const chatMessage: ChatMessage = JSON.parse(message.body);
+      this.messagesSubject.next([chatMessage]);
+    });
+  }
+
+  getMessagesList(): Observable<ChatMessage[]> {
+    return this.messagesSubject.asObservable();
+  }
+
+  disconnect() {
+    if (this.stompClient?.active) {
+      this.stompClient.deactivate();
+      this.stompClient = null;
     }
   }
 }

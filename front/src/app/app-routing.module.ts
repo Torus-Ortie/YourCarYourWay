@@ -19,7 +19,7 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'message', component: ChatComponent }
+      { path: 'chat/:reservation', component: ChatComponent }
     ]
   },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
