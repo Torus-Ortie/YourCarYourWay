@@ -21,7 +21,7 @@ import lombok.Data;
 public class User {
     public enum Role {
         CLIENT,
-        EMPLOYEE,
+        SUPPORT,
         ADMIN
     }
     

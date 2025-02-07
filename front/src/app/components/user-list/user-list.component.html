@@ -1,16 +1,16 @@
 <div>
-    <h2>Select an online user to chat with or <button (click)="refreshUsers()">refresh online users</button></h2>
+  <h2>Select an online user to chat with or <button (click)="refreshUsers()">refresh users</button></h2>
 
-    <ul *ngIf="filteredUsers.length > 0; else noUsersTemplate">
-      <li *ngFor="let user of filteredUsers">
-        <a [routerLink]="['/chat', user.username]">
-          <span title="{{ user.role }}" class="font-medium capitalize">{{ user.username }}</span>
-        </a>
-      </li>
-    </ul>
+  <ul *ngIf="filteredUsers.length > 0; else noUsersTemplate">
+    <li *ngFor="let user of filteredUsers">
+      <a [routerLink]="['/chat', user.name]">
+        <span title="{{ user.role }}" class="font-medium capitalize">{{ user.name }}</span>
+      </a>
+    </li>
+  </ul>
 
-    <ng-template #noUsersTemplate>
-      <p class="bg-red-300" *ngIf="currentUserRole === 'CLIENT'">There are no available employees to help you.<br> Please try again later or send a message via the contact form.</p>
-      <p class="bg-red-300" *ngIf="currentUserRole === 'EMPLOYEE'">No clients.</p>
-    </ng-template>
-  </div>
+  <ng-template #noUsersTemplate>
+    <p class="bg-red-300" *ngIf="currentUserRole === 'CLIENT'">There are no available employees to help you.<br> Please try again later or send a message via the contact form.</p>
+    <p class="bg-red-300" *ngIf="currentUserRole === 'SUPPORT'">No clients.</p>
+  </ng-template>
+</div>

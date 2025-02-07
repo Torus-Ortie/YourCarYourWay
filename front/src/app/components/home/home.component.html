@@ -8,5 +8,6 @@
 </header>
 <main>
   <h2>Welcome, <span class="capitalize">{{ user?.name }}</span></h2>
-  <app-chat></app-chat>
+  <app-user-list [currentUsername]="name" [currentUserRole]="role"></app-user-list>
+  <router-outlet></router-outlet>
 </main> 

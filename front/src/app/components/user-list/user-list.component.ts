@@ -10,7 +10,7 @@ import { UserService } from '../../services/user.service';
 export class UserListComponent implements OnInit, OnDestroy {
   @Input() currentUsername: string = '';
   @Input() currentUserRole: string = '';
-  onlineUsers: any[] = [];
+  otherUsers: any[] = [];
   filteredUsers: any[] = [];
   userlistSubscription: Subscription | null = null;
 
@@ -18,7 +18,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userlistSubscription = this.userService.getUsers().subscribe(users => {
-      this.onlineUsers = users;
+      this.otherUsers = users;
       this.filterUsers();
     });
 
@@ -34,11 +34,11 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   filterUsers(): void {
-    this.filteredUsers = this.onlineUsers.filter(user => user.name !== this.currentUsername);
+    this.filteredUsers = this.otherUsers.filter(user => user.name !== this.currentUsername);
 
     if (this.currentUserRole === 'CLIENT') {
-      this.filteredUsers = this.filteredUsers.filter(user => user.role === 'EMPLOYEE');
-    } else if (this.currentUserRole === 'EMPLOYEE') {
+      this.filteredUsers = this.filteredUsers.filter(user => user.role === 'SUPPORT');
+    } else if (this.currentUserRole === 'SUPPORT') {
       this.filteredUsers = this.filteredUsers.filter(user => user.role === 'CLIENT');
     }
   }

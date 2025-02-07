@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WebSocketService } from '../../services/websocket.service';
 import { ChatMessage } from '../../interfaces/chat.interface';
-import { Subscription, of, filter } from 'rxjs';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { switchMap, catchError, finalize } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap, catchError, takeUntil } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -17,60 +17,35 @@ export class ChatComponent implements OnInit, OnDestroy {
   currentUserId: string = '';
   reservationId: string = '';
   chatId: string = '';
-  private userProfileSubscription: Subscription | null = null;
-  private routeSubscription: Subscription | null = null;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private webSocketService: WebSocketService,
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.userProfileSubscription = this.userService.getUser().pipe(
+    this.userService.getUser().pipe(
+      takeUntil(this.destroy$),
       switchMap(user => {
-        this.currentUserId = user?.name || '';
-
-        if (!this.currentUserId) {
-          return of(null);
-        }
-
+        this.currentUserId = user?.name || ''; 
+        if (!this.currentUserId) return of(null);
+        
         return this.route.paramMap;
       }),
       switchMap(params => {
-        if (!params) {
-          return of(null);
-        }
+        this.reservationId = params?.get('reservation') || '';
+        if (!this.reservationId) return of(null);
 
-        const reservation = params.get('reservation');
-
-        if (!reservation) {
-          return of(null);
-        }
-
-        this.reservationId = reservation;
         this.webSocketService.connect(this.currentUserId);
-
         return this.webSocketService.getMessagesList();
       }),
-      catchError(_error => {
-        return of([]);
-      }),
-      finalize(() => {
-        this.messages = [];
-      })
+      catchError(_ => of([]))
     ).subscribe(messages => {
       if (messages) {
         this.messages = [...this.messages, ...messages];
       }
-    });
-
-    this.routeSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-
-      this.resetChat();
     });
   }
 
@@ -88,8 +63,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.userProfileSubscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
     this.webSocketService.disconnect();
+    this.resetChat();
   }
 
   private resetChat(): void {

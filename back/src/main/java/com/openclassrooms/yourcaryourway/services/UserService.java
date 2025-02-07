@@ -60,7 +60,7 @@ public class UserService {
     /**
      * Get the current connected user of the session
      *
-     * @param emailOrName - The current username connected
+     * @param emailOrName - The current name connected
      * @return User mapped as User
      *
      */
@@ -79,7 +79,7 @@ public class UserService {
      * Update a user
      *
      * @param user - The User to update mapped as UserLogin
-     * @param emailOrName - The current username connected
+     * @param emailOrName - The current name connected
      * @return User updated and mapped as User
      * 
      */

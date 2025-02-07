@@ -14,7 +14,7 @@ export class WebSocketService {
 
   constructor() {}
 
-  connect(username: string) {
+  connect(name: string) {
     if (this.stompClient?.active) {
       this.disconnect();
     }
@@ -27,7 +27,7 @@ export class WebSocketService {
     });
 
     this.stompClient.onConnect = (_frame) => {
-      this.getMessages(username)
+      this.getMessages(name)
     };
 
     this.stompClient.activate();
@@ -42,8 +42,8 @@ export class WebSocketService {
     this.messagesSubject.next([message]);
   }
 
-  getMessages(username: string) {
-    this.stompClient?.subscribe(`/user/${username}/queue/messages`, (message) => {
+  getMessages(name: string) {
+    this.stompClient?.subscribe(`/user/${name}/queue/messages`, (message) => {
       const chatMessage: ChatMessage = JSON.parse(message.body);
       this.messagesSubject.next([chatMessage]);
     });

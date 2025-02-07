@@ -14,14 +14,8 @@ const routes: Routes = [
   { path: '', component: UnauthComponent, canActivate: [UnauthGuard] },
   { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'chat/:reservation', component: ChatComponent }
-    ]
-  },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'chat/:username', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }
 ];
