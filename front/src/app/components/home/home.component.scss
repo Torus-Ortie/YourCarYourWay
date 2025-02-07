@@ -29,3 +29,8 @@ a[routerLinkActive="active"]:hover {
     background-color: var(--accent-color);
   }
 }
+
+main {
+  display: grid;
+  text-align: center;
+}

@@ -15,7 +15,7 @@ public class SupportMessagesController {
     @Autowired
     private SupportMessagesService supportmessagesservice;
 
-    @MessageMapping("/message") // Quand un client envoie un message à /api/message
+    @MessageMapping("/message")
     public void sendMessage(SupportMessages supportmessages) {
         supportmessagesservice.sendMessageToUser(supportmessages.getReservationId(), supportmessages);
     }

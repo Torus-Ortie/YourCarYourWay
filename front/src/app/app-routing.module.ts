@@ -8,6 +8,7 @@ import { LoginComponent } from './features/auth/components/login/login.component
 import { RegisterComponent } from './features/auth/components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: UnauthComponent, canActivate: [UnauthGuard] },
@@ -16,10 +17,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard]/*,
+    canActivate: [AuthGuard],
     children: [
-      { path: 'me', component: MeComponent }
-    ]*/
+      { path: 'message', component: ChatComponent }
+    ]
   },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }
