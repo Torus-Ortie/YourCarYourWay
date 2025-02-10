@@ -16,13 +16,10 @@ CREATE TABLE `USERS` (
 -- Table des messages de support
 CREATE TABLE `SUPPORTMESSAGES` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` INT NOT NULL,
-    `reservation_id` INT DEFAULT NULL,
-    `content` TEXT NOT NULL,
+    `reservation_id` VARCHAR(255) NOT NULL,
+    `content` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE `SUPPORTMESSAGES` ADD FOREIGN KEY (`user_id`) REFERENCES `USERS` (`id`);
 
 INSERT INTO ycyw.USERS (`name`, `email`, `role`, `password`) VALUES ('Support', 'support@email.com', 'SUPPORT', 'Support1234*');
 INSERT INTO ycyw.USERS (`name`, `email`, `role`, `password`) VALUES ('Client', 'client@email.com','CLIENT',  'Client1234*');

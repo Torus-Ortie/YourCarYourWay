@@ -1,21 +1,12 @@
-<section>
-  <h2>Chat with <span class="capitalize font-medium">{{reservationId}}</span></h2>
-  <div>
-    <div>
-      <div *ngFor="let message of messages" [ngClass]="{'justify-end': message.userId === currentUserId, 'justify-start': message.userId !== currentUserId}">
-        <div [ngClass]="{'bg-brand-blue/70': message.userId === currentUserId, 'bg-brand-orange/85': message.userId !== currentUserId}">
-          <div >
-            <span class="bg-white p-1 rounded-sm">{{message.userId}}</span>
-            <span class="text-xs">{{ message.createdat | date }}</span>
-          </div>
-          <p>{{ message.content }}</p>
-        </div>
-      </div>
-    </div>
-    <div>
-      <label for="newMessage" class="sr-only">Type a message</label>
-      <input id="newMessage" class="flex-1 p-2 border rounded-sm" [(ngModel)]="newMessage" placeholder="Type a message..." />
-      <button (click)="sendMessage()">Send</button>
+<div class="chat-container">
+  <div class="chat-messages">
+    <div *ngFor="let msg of messages">
+      <strong>{{ msg.reservationId }}:</strong> {{ msg.content }}
     </div>
   </div>
-</section>
+  
+  <div class="chat-input">
+    <input type="text" [(ngModel)]="messageContent" placeholder="Écris un message..." />
+    <button (click)="sendMessage()">Envoyer</button>
+  </div>
+</div>

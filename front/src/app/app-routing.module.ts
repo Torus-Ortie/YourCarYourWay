@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [UnauthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [UnauthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'chat/:username', component: ChatComponent, canActivate: [AuthGuard] },
+  { path: 'chat/:name', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'me', component: MeComponent, canActivate: [AuthGuard] },
   { path: '**', component: NotFoundComponent }
 ];

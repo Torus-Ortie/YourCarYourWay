@@ -21,9 +21,6 @@ public class ChatMessages {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
-
     @Column(name = "reservation_id", nullable = false)
     private String reservationId;
 
@@ -31,5 +28,6 @@ public class ChatMessages {
     private String content;
 
     @CreationTimestamp
-    private LocalDateTime createdat;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 }
