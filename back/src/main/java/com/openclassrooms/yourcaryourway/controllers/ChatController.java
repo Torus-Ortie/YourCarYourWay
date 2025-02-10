@@ -19,7 +19,7 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/chat")
     public ChatMessages sendMessage(ChatMessages message) {
-        System.out.println("Message reçu : " + message.getContent());
+        System.out.println("Message reçu : " + message.getContent() + " pour réservation : " + message.getReservationId());
         message.setCreatedAt(LocalDateTime.now());
         chatMessageRepository.save(message);
         return message;
